@@ -2,13 +2,11 @@
 
 Reusable workshop packs for deploying synthetic data, agents, and skills in Dust.
 
-## Current contents
+## Repository structure
 
-- `manifest.yaml`: pack metadata and installation manifest
-- `data/`: synthetic outbound accounts, contacts, signals, and CRM state
-- `scenarios/`: required and extension workshop scenarios
-- `output_templates/`: templates for generated outputs
+- `OUTBOUND_WORKSHOP_DATA/`: structured synthetic data and workshop materials
 - `skills/`: reusable Dust skill instructions
 - `agents/`: Dust agent configurations and setup files
+- `manifest.yaml`: pack metadata and asset map
 
-All current records are synthetic and use reserved `.example` domains.
+The outbound data is organized into source-of-truth records, source-system state, research evidence, checkpoints, and participant materials. All current records are synthetic and use reserved `.example` domains.

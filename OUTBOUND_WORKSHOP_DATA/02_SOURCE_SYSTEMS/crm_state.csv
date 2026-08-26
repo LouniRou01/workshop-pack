@@ -1,0 +1,25 @@
+record_type,record_id,account_id,company_name,crm_record_id,owner,lifecycle_stage,open_opportunity,active_sequence,sequence_name,sequence_status,last_touch_date,do_not_contact,email_status,duplicate_key,notes
+account,acc_001,acc_001,Northstar Ledger,crm_acc_001,unassigned,lead,false,false,,,,false,,,Net-new account.
+account,acc_002,acc_002,Harborline Systems,crm_acc_002,unassigned,lead,false,false,,,,false,,,Net-new account.
+account,acc_003,acc_003,Morrow Mobility,crm_acc_003,unassigned,lead,false,false,,,,false,,,Net-new account.
+account,acc_004,acc_004,Cedar & Finch Advisory,crm_acc_004,unassigned,lead,false,false,,,,false,,,Net-new account.
+account,acc_005,acc_005,Brightforge Manufacturing,crm_acc_005,alex.morgan,opportunity,true,true,,,2026-08-19,false,,,Existing opportunity owned by Alex Morgan.
+account,acc_006,acc_006,Meadowbridge Health,crm_acc_006,unassigned,lead,false,false,,,,false,,,Weak-fit account.
+account,acc_007,acc_007,Atelier Nova,crm_acc_007,unassigned,lead,false,false,,,,false,,,Small services company.
+account,acc_008,acc_008,Summit Grid Authority,crm_acc_008,public-sector-team,lead,false,false,,,2026-07-30,true,,,Public-sector account. Review before any outreach.
+contact,con_001,acc_001,Northstar Ledger,crm_con_001,unassigned,lead,,false,,not_enrolled,,false,valid,elena.marin@northstar-ledger.example,
+contact,con_002,acc_001,Northstar Ledger,crm_con_002,unassigned,lead,,false,,not_enrolled,,false,valid,jonas.vega@northstar-ledger.example,
+contact,con_003,acc_002,Harborline Systems,crm_con_003,unassigned,lead,,false,,not_enrolled,,false,valid,amira.khan@harborline-systems.example,
+contact,con_004,acc_002,Harborline Systems,crm_con_004,unassigned,lead,,false,,not_enrolled,,false,valid,theo.meyer@harborline-systems.example,
+contact,con_005,acc_003,Morrow Mobility,crm_con_005,unassigned,lead,,false,,not_enrolled,,false,valid,sofia.keller@morrow-mobility.example,
+contact,con_006,acc_003,Morrow Mobility,crm_con_006,unassigned,lead,,false,,not_enrolled,,false,valid,lukas.brandt@morrow-mobility.example,
+contact,con_007,acc_004,Cedar & Finch Advisory,crm_con_007,unassigned,lead,,false,,not_enrolled,,false,valid,nadia.rossi@cedar-finch.example,
+contact,con_008,acc_004,Cedar & Finch Advisory,crm_con_008,unassigned,lead,,false,,not_enrolled,,false,valid,marc.dubois@cedar-finch.example,
+contact,con_009,acc_005,Brightforge Manufacturing,crm_con_009,alex.morgan,opportunity,,false,Digital Transformation Follow-up,not_enrolled,2026-08-19,false,valid,claire.morel@brightforge.example,
+contact,con_010,acc_005,Brightforge Manufacturing,crm_con_010,alex.morgan,opportunity,,true,Digital Transformation Follow-up,active,2026-08-19,false,valid,hugo.bernard@brightforge.example,
+contact,con_011,acc_006,Meadowbridge Health,crm_con_011,unassigned,lead,,false,,not_enrolled,,false,valid,maya.smit@meadowbridge.example,
+contact,con_012,acc_006,Meadowbridge Health,crm_con_012,unassigned,lead,,false,,not_enrolled,,false,valid,ruben.visser@meadowbridge.example,
+contact,con_013,acc_007,Atelier Nova,crm_con_013,unassigned,lead,,false,,not_enrolled,,false,valid,giulia.conti@atelier-nova.example,
+contact,con_014,acc_007,Atelier Nova,crm_con_014,unassigned,lead,,false,,not_enrolled,,false,valid,pietro.riva@atelier-nova.example,
+contact,con_015,acc_008,Summit Grid Authority,crm_con_015,public-sector-team,lead,,false,,not_enrolled,2026-07-30,true,valid,lucia.ortega@summit-grid.example,
+contact,con_016,acc_008,Summit Grid Authority,crm_con_016,public-sector-team,lead,,false,,not_enrolled,2026-07-30,false,valid,diego.navarro@summit-grid.example,
