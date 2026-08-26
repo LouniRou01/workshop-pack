@@ -3,8 +3,16 @@ version: 0.1.0
 description: Workshop pack for deploying synthetic data, agents, and skills in Dust.
 
 assets:
-  data: data/
-  scenarios: scenarios/
+  data:
+    - data/accounts.csv
+    - data/contacts.csv
+    - data/outbound_signals.csv
+    - data/crm_accounts.csv
+    - data/crm_contacts.csv
+    - data/DATA_DICTIONARY.md
+  scenarios:
+    - scenarios/scenario_registry.csv
+    - scenarios/README.md
   output_templates: output_templates/
   skills: skills/
   agents: agents/
