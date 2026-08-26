@@ -1,0 +1,10 @@
+name: workshop-pack
+version: 0.1.0
+description: Workshop pack for deploying synthetic data, agents, and skills in Dust.
+
+assets:
+  data: data/
+  scenarios: scenarios/
+  output_templates: output_templates/
+  skills: skills/
+  agents: agents/
