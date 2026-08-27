@@ -1,9 +1,0 @@
-account_id,crm_account_id,owner,lifecycle_stage,open_opportunity,last_touch_date,active_sequence,do_not_contact,notes
-acc_001,crm_acc_001,unassigned,lead,false,,false,false,Net-new account.
-acc_002,crm_acc_002,unassigned,lead,false,,false,false,Net-new account.
-acc_003,crm_acc_003,unassigned,lead,false,,false,false,Net-new account.
-acc_004,crm_acc_004,unassigned,lead,false,,false,false,Net-new account.
-acc_005,crm_acc_005,alex.morgan,opportunity,true,2026-08-19,true,false,Existing opportunity owned by Alex Morgan.
-acc_006,crm_acc_006,unassigned,lead,false,,false,false,Weak-fit account.
-acc_007,crm_acc_007,unassigned,lead,false,,false,false,Small services company.
-acc_008,crm_acc_008,public-sector-team,lead,false,2026-07-30,false,true,Public-sector account. Review before any outreach.
