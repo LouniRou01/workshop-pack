@@ -32,9 +32,11 @@ These files simulate the operational systems around the canonical accounts and c
 - `owner`: the account's `owner` in `crm_state_accounts.csv` if this specific contact is being actively worked, otherwise `unassigned`. Only a subset of contacts per account (1-2 per account with an open deal or customer/pilot status) are marked as actively owned, reflecting that not every contact at an account is being worked.
 - `active_sequence`: `true` if this contact is currently in an outbound sequence. Only ever `true` for a subset of contacts at accounts with an open deal.
 - `do_not_contact`: currently always inherited from the account's `do_not_contact` in `crm_state_accounts.csv` (no individual opt-outs yet), but the two files are not required to match, e.g. a future update could suppress a single contact without excluding the whole account.
-- `last_touch_date`: the most recent outreach touch for this specific contact; independent of the account-level touch date.
+- `last_touch_date`: the date of this contact's most recent activity in `activities.csv`. Derived from `activities.csv`, not set independently, so the two files cannot drift apart. Blank if the contact has never been touched.
 
 There is no `customer_status`, `open_opportunity`, or `lifecycle_stage` column here: those are account-level facts. Join to `crm_state_accounts.csv` on `account_id` to get them for a given contact.
+
+**611 of the 1,000 contacts (61%) have been touched at least once.** This is intentionally decoupled from `owner`/`active_sequence` (only ~88 contacts are *currently* actively owned or in a live sequence): most touched contacts were reached out to at some point and went cold, nobody is actively following up on them today. That gap, touched-but-not-owned, is itself part of the workshop: it's the pool of "warm-but-dormant" contacts a participant might re-engage using a new signal.
 
 ## `deals.csv`
 
@@ -63,3 +65,42 @@ There is no `customer_status`, `open_opportunity`, or `lifecycle_stage` column h
 - `crm_state_accounts.open_opportunity` is `true` if and only if the account has at least one `open` deal in `deals.csv`.
 - The deal `owner` on any open deal always matches the account `owner` in `crm_state_accounts.csv`.
 - No excluded account ever appears in `deals.csv`.
+
+## `activities.csv`
+
+1,068 rows: the interaction log behind `crm_state_contacts.last_touch_date`. Every touched contact has at least one row here; every row belongs to a non-suppressed (`do_not_contact: false`) contact.
+
+- `activity_id`, `account_id`, `contact_id`, `company_name`: identifiers, joins to `01_SOURCE_OF_TRUTH/`.
+- `activity_type`: `email_sent`, `email_opened`, `email_replied`, `linkedin_connection_sent`, `call_placed`, `call_connected`, `voicemail_left`, `meeting_scheduled`, `meeting_held`.
+- `channel`: `email`, `linkedin`, `phone`, or `video`.
+- `direction`: `outbound` (rep/sequence-initiated) or `inbound` (`email_replied`, `call_connected`).
+- `activity_date`: always on or after the contact's `contact_created_at` in `01_SOURCE_OF_TRUTH/contacts.csv`, and never after 2026-08-28 (dataset's "today").
+- `owner`: who performed the touch. For contacts still `unassigned` in `crm_state_contacts.csv` today (touched historically but nobody currently owns follow-up), this is the rep who made the original outreach, not the current owner.
+- `related_deal_id`: set when this contact is a deal's `primary_contact_id` in `deals.csv`.
+- `related_signal_id`: set on the first touch for the 10 contacts referenced in `signals.csv`, i.e. the outreach that was triggered by that signal.
+- `related_campaign_id`: reserved for when `campaigns.csv` is populated; blank for now.
+- `outcome`: `sent`, `no_response`, `opened`, `replied_neutral`, `replied_positive`, `booked`, `held`, `connected`.
+
+### How a contact's touch history is built
+
+Each touched contact gets one of several activity "arcs", 1 to 5 rows forming a coherent story rather than independent random rows:
+
+| Arc | Rows | Used for |
+|---|---|---|
+| `single_cold` / `double_cold` | 1-2 | Most touched-but-unowned contacts: a cold email (or two), no response. |
+| `opened_stalled` | 2 | Opened the email, never replied. |
+| `replied_stalled` | 3 | Replied, but nobody followed up, an intentional "dropped ball" for realism. |
+| `warming_multi` | 3 | LinkedIn touch + email, some engagement, not yet owned. |
+| `engaged_meeting` | 5 | Currently actively owned contacts: full email → open → reply → meeting arc. |
+| `call_engaged` | 5 | Currently actively owned contacts: phone-led arc ending in a booked meeting. |
+
+`engaged_meeting`/`call_engaged` are only used for the ~88 contacts with a real `owner` in `crm_state_contacts.csv`; everyone else gets a colder arc.
+
+### Consistency guarantees (validated)
+
+- `crm_state_contacts.last_touch_date` equals the max `activity_date` for that contact, exactly, for all 611 touched contacts.
+- Zero activities for any `do_not_contact: true` contact.
+- Every `active_sequence: true` contact has at least one activity.
+- No `activity_date` before the contact's `contact_created_at`, and none after 2026-08-28.
+- Every `related_deal_id` and `related_signal_id` resolves to a real row in `deals.csv` / `signals.csv`.
+
