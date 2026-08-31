@@ -8,6 +8,7 @@ These files simulate the operational systems around the canonical accounts and c
 
 - `record_type`: `account` or `contact`.
 - `record_id` / `account_id` / `company_name`: joins to `01_SOURCE_OF_TRUTH/`.
+- `first_name` / `last_name` (contact rows only): denormalized from `01_SOURCE_OF_TRUTH/contacts.csv` for convenience, always blank on account rows, always populated and identical to the source contact on contact rows.
 - `customer_status` (account rows only): `prospect`, `pilot`, `customer`, `churned`, or `not_applicable` for excluded accounts.
 - `owner`: derived from `deals.csv` when an open deal exists; otherwise `unassigned`.
 - `lifecycle_stage`: `lead`, `opportunity`, `customer`, `churned`, or `not_applicable`.
