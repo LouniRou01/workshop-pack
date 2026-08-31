@@ -104,3 +104,38 @@ Each touched contact gets one of several activity "arcs", 1 to 5 rows forming a 
 - No `activity_date` before the contact's `contact_created_at`, and none after 2026-08-28.
 - Every `related_deal_id` and `related_signal_id` resolves to a real row in `deals.csv` / `signals.csv`.
 
+## `emails.csv`
+
+794 rows: the actual email content behind the `email_sent`, `email_replied`, and `meeting_scheduled` (email-channel) rows in `activities.csv`. `email_opened` activities don't get their own row here, they're an engagement event on a message that's already logged.
+
+- `email_id`, `activity_id`: joins 1:1 to a row in `activities.csv`. Every email-channel `email_sent`/`email_replied`/`meeting_scheduled` activity has exactly one row here.
+- `thread_id`: `thr_<contact_id>`, groups every message with a given contact into one discussion, in chronological order.
+- `account_id`, `company_name`, `contact_id`: joins to `01_SOURCE_OF_TRUTH/`.
+- `direction`: `outbound` (from the rep) or `inbound` (from the contact).
+- `message_type`: `outbound_send`, `inbound_reply`, or `meeting_confirmation`.
+- `from_email` / `to_email`: the rep's address is `<owner>@lumenops.example` (the fictional vendor selling org); the contact's address comes from `01_SOURCE_OF_TRUTH/contacts.csv`.
+- `subject` / `body`: the actual message text.
+- `related_deal_id` / `related_signal_id`: same meaning as in `activities.csv`, only set when the message content actually reflects that deal/signal.
+- `template_id`: which content pattern generated this message, see below.
+
+### How the content was generated
+
+Not every message is hand-written, most cold outreach reuses a small set of templates, personalized with real fields (company name, job title, function, industry), the same way real SDR sequences work:
+
+| `template_id` | Count | What it is |
+|---|---:|---|
+| `tmpl_01` .. `tmpl_10` | ~720 | Cold outbound templates, picked deterministically per contact, filled with their real company/job_title/function/industry. |
+| `signal_grounded` | 7 | Fully custom first-touch email that references the actual signal in `signals.csv` (only for the 7 signals with a genuine, usable `recommended_angle`; the 3 "weak signal" / "no signal" / "do not contact" signals intentionally fall back to a generic cold template instead of leaking their internal meta-guidance text into a sent email). |
+| `follow_up_bump` | ~85 | The second email in a `double_cold` activity arc. |
+| `reply_positive` / `reply_neutral` / `reply_negative` | ~58 | Inbound reply content, matching the `outcome` on the corresponding `activities.csv` row. |
+| `meeting_confirmation` | ~15 | Short outbound logistics email following a booked meeting in the `engaged_meeting` arc. |
+
+### Consistency guarantees (validated)
+
+- 1:1 coverage: every email-channel `email_sent`/`email_replied`/`meeting_scheduled` row in `activities.csv` has exactly one row here, and vice versa.
+- `sent_date` always matches the linked activity's `activity_date`.
+- Zero rows for `do_not_contact: true` contacts.
+- `from_email`/`to_email` always resolve correctly to the rep's `@lumenops.example` address and the contact's real address in `contacts.csv`.
+- Every `related_deal_id`/`related_signal_id` resolves to a real row, and is only set when the content actually reflects it.
+- Messages within a thread are in chronological order.
+
