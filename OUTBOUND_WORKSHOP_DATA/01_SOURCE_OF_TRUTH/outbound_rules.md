@@ -5,10 +5,10 @@ These rules define how an agent (or a participant) should move from raw data to 
 ## 1. How to select an account and contact
 
 1. Start from `account_tier` in `accounts.csv`. Prefer `tier_1`, then `tier_2`. Do not select `exclude` accounts.
-2. Check `02_SOURCE_SYSTEMS/crm_state.csv` before doing anything else. If the account has `do_not_contact: true`, an `open_opportunity: true` with an owner, or an `active_sequence: true`, stop and follow rule 9 instead of proceeding.
+2. Check `02_SOURCE_SYSTEMS/crm_state_accounts.csv` before doing anything else. If the account has `do_not_contact: true` or `open_opportunity: true` with an owner, stop and follow rule 9 instead of proceeding.
 3. Within a selected account, choose the contact with the highest `persona_fit` (`priority` over `relevant` over `secondary`). Never select a `not_target` contact.
 4. If two contacts have the same `persona_fit`, prefer the one connected to the most recent or strongest signal in `signals.csv`.
-5. Confirm the contact's own CRM state in `crm_state.csv` is not already suppressed or actively worked before treating them as available.
+5. Confirm the contact's own CRM state in `crm_state_contacts.csv` is not already suppressed (`do_not_contact: true`) or actively worked (`active_sequence: true`) before treating them as available.
 
 ## 2. How to combine company and contact fit
 
@@ -79,7 +79,7 @@ Always route to a human for approval before any external action, and specificall
 
 ## 9. When existing CRM ownership, sequences, or suppression flags block outreach
 
-Check `crm_state.csv` for every candidate before generating outreach:
+Check `crm_state_accounts.csv` and `crm_state_contacts.csv` for every candidate before generating outreach:
 
 - `do_not_contact: true` at the account or contact level: stop immediately, do not draft a message, and do not propose enrollment in any campaign. This corresponds to scenario `scenario_005`.
 - `open_opportunity: true` with a named `owner`: do not create new outreach; instead, notify the existing owner with the new signal or research as context. This corresponds to scenario `scenario_004`.
