@@ -71,6 +71,7 @@ There is no `customer_status`, `open_opportunity`, or `lifecycle_stage` column h
 1,068 rows: the interaction log behind `crm_state_contacts.last_touch_date`. Every touched contact has at least one row here; every row belongs to a non-suppressed (`do_not_contact: false`) contact.
 
 - `activity_id`, `account_id`, `contact_id`, `company_name`: identifiers, joins to `01_SOURCE_OF_TRUTH/`.
+- `first_name` / `last_name`: denormalized from `01_SOURCE_OF_TRUTH/contacts.csv` for convenience, always identical to the source contact (same pattern as `crm_state_contacts.csv`).
 - `activity_type`: `email_sent`, `email_opened`, `email_replied`, `linkedin_connection_sent`, `call_placed`, `call_connected`, `voicemail_left`, `meeting_scheduled`, `meeting_held`.
 - `channel`: `email`, `linkedin`, `phone`, or `video`.
 - `direction`: `outbound` (rep/sequence-initiated) or `inbound` (`email_replied`, `call_connected`).
